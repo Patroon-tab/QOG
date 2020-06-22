@@ -7,14 +7,13 @@ Created on Sat May 16 19:29:40 2020
 import serial
 import time
 import numpy as np
-from DMM import initalise as initialisedmm, getvalue
-from Controll_PS import initialise as initialiseps, setcurrent, setvoltage
-from Controll_PS import getvalues as getvalueps
+from DMM_UT61B.DMM import initalise as initialisedmm, getvalue
+from RND_320_KD3005P.Controll_PS import initialise as initialiseps, setcurrent, setvoltage
+from RND_320_KD3005P.Controll_PS import getvalues as getvalueps
 from matplotlib.backends.backend_tkagg import ( FigureCanvasTkAgg, NavigationToolbar2Tk)
-from matplotlib.backend_bases import key_press_handler
 from matplotlib.figure import Figure
 import serial.tools.list_ports
-from tkinter import * 
+from tkinter import *
 from tkinter.ttk import *
 
 class MyGui:
@@ -270,8 +269,15 @@ class MyGui:
         canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)   
         
         window2.mainloop()
-        
-root = Tk()
-MyGui(root)
-root.mainloop()
-    
+
+
+def main():
+
+    root = Tk()
+    MyGui(root)
+    root.mainloop()
+
+
+if __name__ == "__main__":
+    main()
+
