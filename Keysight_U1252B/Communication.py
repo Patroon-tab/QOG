@@ -71,6 +71,15 @@ class Connection:
         time.sleep(delay)
         return (unit, x)
 
+    def getbattery(self):
+
+        self.sendcommand(b'SYST:BATT?')
+        x = self.ser.readline()
+        x = self.decodein(x)
+        x = float(x)
+        return x
+        
+
     def kill(self):
         self.ser.close()
 
@@ -78,6 +87,7 @@ def main():
     dmm = Connection()
     dmm.initialize("COM5")
     print(dmm.getValue())
+    print(dmm.getbattery())
     dmm.kill()
 
 

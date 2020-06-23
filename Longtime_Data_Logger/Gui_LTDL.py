@@ -10,6 +10,9 @@ from tkinter import filedialog
 from tkinter import messagebox
 import serial.tools.list_ports
 from Keysight_U1252B.Communication import Connection
+from tkinter import *
+
+
 
 
 class MyGui:
@@ -25,6 +28,7 @@ class MyGui:
         # Frame1
         self.frame1 = Frame(self.window)
         self.frame1.grid(row=0, column=0)
+
         lab = Label(self.frame1, text="File Header:", font="calibri 20", width=10, height=1)
         lab.grid(row=0, column=0)
 
@@ -76,6 +80,10 @@ class MyGui:
         but = Button(self.frame5, text="Ping", command=self.ping)
         but.grid(row=0, column=1)
         self.dropdowncom(self.frame5)
+        self.batlabel = Label(self.frame5, text="Battery: n/a %")
+        self.batlabel.grid(row=1, column=0)
+        #self.batterystat = Progressbar(self.frame5, orient=HORIZONTAL, length=100, mode="determinate")
+        #self.batterystat.grid(row=1, column=0, columnspan=2)
 
         # Frame5 End
 
@@ -107,12 +115,12 @@ class MyGui:
         dmm = Connection()
         dmm.initialize(self.dmmcom.get())
         dmm.finddevice()
+        self.batlabel["text"]= "Battery: " +  str(dmm.getbattery()) + "%"
         dmm.kill()
 
     def on_closing(self):
         if messagebox.askokcancel("Quit",
                                   "Do you want to quit?\n some meassurement will be lost\n and the programm will stop meassuring"):
-
             self.window.destroy()
 
 
