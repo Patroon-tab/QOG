@@ -7,12 +7,16 @@ Created on Fri Jun 12 10:14:08 2020
 from tkinter import *
 from tkinter.scrolledtext import ScrolledText
 from tkinter import filedialog
+from tkinter import messagebox
 
 
 class MyGui:
 
     def __init__(self):
+
         self.window = Tk()
+        self.window.protocol("WM_DELETE_WINDOW", self.on_closing)
+
 
         """
         but = Button(self.window, text = "Start", font = "Calibri 20", width = 6, height = 1)
@@ -54,12 +58,17 @@ class MyGui:
         self.minutesE.grid(row=0, column=5)
         lab = Label(self.frame3, text="Minutes:")
         lab.grid(row=0, column=4)
+        #Fram3 End
     def start(self):
         self.window.mainloop()
 
     def browse_button(self):
         self.filename = filedialog.askdirectory()
         print(self.filename)
+
+    def on_closing(self):
+        if messagebox.askokcancel("Quit", "Do you want to quit?\n some meassurement will be lost\n and the programm will stop meassuring"):
+            self.window.destroy()
 
 def main():
     la = MyGui()
