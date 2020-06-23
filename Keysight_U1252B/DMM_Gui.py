@@ -6,10 +6,7 @@ Created on Tue May 26 16:04:29 2020
 """
 
 from tkinter import *
-from Serial_Communication import initialise
-from Serial_Communication import getsetup
-from Serial_Communication import getvalue
-from Serial_Communication import finddevice
+from Communication import Connection
 import serial
 import serial.tools.list_ports
 
@@ -49,16 +46,18 @@ class MyGui:
         self.DMM.config(width=11)
 
     def pingdmm(self):
+        dmm = Connection()
+        dmm.initialize(self.dmmcom.get())
+        dmm.finddevice()
+        dmm.kill()
 
-        ser = initialise(self.dmmcom.get())
-        finddevice(ser)
-        ser.close()
 
     def getvalues(self):
 
-        ser = initialise(self.dmmcom.get())
-        unit = getsetup(ser)[0]
-        value = getvalue(ser)
+        dmm = Connection()
+        dmm.initialize(self.dmmcom.get())
+        unit = dmm.getsetup()[0]
+        value = dmm.getValue()
 
         if value != "Error":
 
@@ -68,6 +67,14 @@ class MyGui:
             self.dmmval.config(text="Error")
 
 
-window = Tk()
-MyGui(window)
-window.mainloop()
+
+
+def main():
+    window = Tk()
+    MyGui(window)
+    window.mainloop()
+
+
+if __name__ == '__main__':
+    main()
+
