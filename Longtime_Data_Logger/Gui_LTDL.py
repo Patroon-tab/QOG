@@ -21,11 +21,12 @@ class MyGui:
         # Frame1
         self.frame1 = Frame(self.window)
         self.frame1.grid(row=0, column=0)
-        lab = Label(self.frame1, text="File Header", font="calibri 20", width=10, height=1)
+        lab = Label(self.frame1, text="File Header:", font="calibri 20", width=10, height=1)
         lab.grid(row=0, column=0)
 
         self.headerentry = ScrolledText(self.frame1, height=3, width=20)
         self.headerentry.grid(row=0, column=1)
+        #Frame1 End
 
         # Frame2
         self.frame2 = Frame(self.window)
@@ -35,7 +36,24 @@ class MyGui:
         buttonpath = Button(self.frame2, text="Browse", command=self.browse_button, font="calibri 20", width=7,
                             height=1)
         buttonpath.grid(row=0, column=1)
+        #Frame2 End
 
+        #Frame3
+        widthtime = 3
+        self.frame3 = Frame(self.window)
+        self.frame3.grid(row=2, column = 0)
+        self.dayE = Entry(self.frame3, width=widthtime)
+        self.dayE.grid(row = 0, column = 1)
+        lab = Label(self.frame3, text = "Days:")
+        lab.grid(row = 0, column = 0)
+        self.hourE = Entry(self.frame3,width=widthtime)
+        self.hourE.grid(row=0, column=3)
+        lab = Label(self.frame3, text="Hours:")
+        lab.grid(row=0, column=2)
+        self.minutesE = Entry(self.frame3,width=widthtime)
+        self.minutesE.grid(row=0, column=5)
+        lab = Label(self.frame3, text="Minutes:")
+        lab.grid(row=0, column=4)
     def start(self):
         self.window.mainloop()
 
@@ -43,6 +61,9 @@ class MyGui:
         self.filename = filedialog.askdirectory()
         print(self.filename)
 
+def main():
+    la = MyGui()
+    la.start()
 
-la = MyGui()
-la.start()
+if __name__ == '__main__':
+    main()
