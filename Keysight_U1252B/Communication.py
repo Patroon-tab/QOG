@@ -17,9 +17,15 @@ class Connection:
         pass
 
     def initialize(self, port):
-        self.port = port
-        self.ser = serial.Serial(self.port, 9600, timeout=1)
-        time.sleep(delay)
+        try:
+
+            self.port = port
+            self.ser = serial.Serial(self.port, 9600, timeout=1)
+            time.sleep(delay)
+
+        except:
+            pass
+
 
     def decodein(self, x):
         x = x.strip(b"""\r\n""")
