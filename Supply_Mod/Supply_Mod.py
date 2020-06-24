@@ -21,7 +21,7 @@ class Connection:
             self.ser = serial.Serial(port, baudrate=115200, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE,
                                      stopbits=serial.STOPBITS_ONE, timeout=1)
 
-            time.sleep(5)
+            time.sleep(3)
             self.readempty()
 
 
@@ -38,12 +38,16 @@ class Connection:
         self.ser.write(command)
         self.readempty()
 
+    """
+    #This command is not in use
     def setcurrent(self, current):
         current = float(current)
         command = "ISET:" + str(current)
         command = command.encode()
+        print(command)
         self.ser.write(command)
         self.readempty()
+    """
 
     def getvalues(self):
         self.ser.write(b'VOUT?')
@@ -82,15 +86,8 @@ class Connection:
         self.ser.readline()
 
 
-
 def main():
-    ar = Connection()
-    ar.initialise("COM6")
-    time.sleep(2)
-
-    # ar.setcurrent(1.0)
-    # ar.setvoltage(8.13)
-    ar.kill()
+    pass
 
 
 if __name__ == "__main__":

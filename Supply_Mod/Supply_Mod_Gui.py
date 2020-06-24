@@ -184,9 +184,8 @@ class MyGui:
             self.errorbox["text"] = ""
             voltage = float(self.inpv.get())
             self.connection.setvoltage(voltage)
-            time.sleep(3)
-            current = float(self.inpc.get())
-            self.connection.setcurrent(current)
+            #current = float(self.inpc.get())
+            #self.connection.setcurrent(current)
 
 
 def main():
