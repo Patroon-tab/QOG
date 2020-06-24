@@ -10,6 +10,7 @@ import tkinter
 import serial.tools.list_ports
 from Supply_Mod import Connection
 import serial
+import time
 
 
 class MyGui:
@@ -86,7 +87,7 @@ class MyGui:
     def start(self):
 
         self.connection = Connection()
-        self.update()
+        #self.update()
         self.window.mainloop()
         self.connection.kill()
 
@@ -175,16 +176,17 @@ class MyGui:
 
     def setvals(self):
 
+        print("setvals")
         if self.connectionstat == False:
             self.errorbox["text"] = "Device is not Connected"
 
         else:
             self.errorbox["text"] = ""
             voltage = float(self.inpv.get())
-            self.connection.setvoltage(self.ser, voltage)
-
+            self.connection.setvoltage(voltage)
+            time.sleep(1)
             current = float(self.inpc.get())
-            self.connection.setcurrent(self.ser, current)
+            self.connection.setcurrent(current)
 
 
 def main():
