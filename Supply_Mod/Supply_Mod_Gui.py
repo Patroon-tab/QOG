@@ -176,7 +176,7 @@ class MyGui:
 
     def setvals(self):
 
-        print("setvals")
+
         if self.connectionstat == False:
             self.errorbox["text"] = "Device is not Connected"
 
@@ -184,7 +184,7 @@ class MyGui:
             self.errorbox["text"] = ""
             voltage = float(self.inpv.get())
             self.connection.setvoltage(voltage)
-            time.sleep(1)
+            time.sleep(3)
             current = float(self.inpc.get())
             self.connection.setcurrent(current)
 

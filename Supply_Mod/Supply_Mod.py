@@ -8,7 +8,6 @@ import serial
 import time
 
 
-
 class Connection:
 
     def __init__(self):
@@ -20,13 +19,11 @@ class Connection:
         try:
 
             self.ser = serial.Serial(port, baudrate=115200, bytesize=serial.EIGHTBITS, parity=serial.PARITY_NONE,
-                                     stopbits=serial.STOPBITS_ONE, timeout=3)
+                                     stopbits=serial.STOPBITS_ONE, timeout=1)
 
-            time.sleep(4)
+            time.sleep(5)
+            self.readempty()
 
-
-            for x in range(7):
-                self.ser.readline()
 
         except Exception as e:
             print(e)
@@ -34,27 +31,27 @@ class Connection:
             return "error"
 
     def setvoltage(self, voltage):
-
-        command = "VSET:" + str(voltage)
+        voltage = float(voltage)
+        command = "VSET:" + str(voltage) + '\r'
         command = command.encode()
+        print(command)
         self.ser.write(command)
-        self.ser.readline()
+        self.readempty()
 
     def setcurrent(self, current):
-
-        command = "ISET:" + str(current)
+        current = float(current)
+        command = "ISET:" + str(current) +'\r'
         command = command.encode()
         self.ser.write(command)
-        self.ser.readline()
+        self.readempty()
 
     def getvalues(self):
-
         self.ser.write(b'VOUT?')
         v = self.ser.readline()
         # self.ser.readline()
         self.ser.write(b'IOUT?')
         i = self.ser.readline()
-        self.ser.readline()
+        self.readempty()
 
         i = i.decode('utf-8')
         v = v.decode('utf-8')
@@ -64,7 +61,6 @@ class Connection:
             print(x)
 
         print("end")
-        
 
         if not i.endswith("A"):
             i = "N/A"
@@ -75,15 +71,26 @@ class Connection:
         return (i, v)
 
     def kill(self):
-
         if self.ser != "error":
             self.ser.close()
+
+    def readempty(self):
+        time.sleep(1)
+        x = b'ava'
+        while x != b'':
+            x = self.ser.readline()
+            print(x)
+        self.ser.readline()
+
 
 
 def main():
     ar = Connection()
     ar.initialise("COM6")
-    print(ar.getvalues())
+    time.sleep(2)
+
+    # ar.setcurrent(1.0)
+    # ar.setvoltage(8.13)
     ar.kill()
 
 
