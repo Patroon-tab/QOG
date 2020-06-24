@@ -71,8 +71,10 @@ class MyGui:
         # Frame 4
         self.frame4 = Frame(self.window, bg=self.bg)
         self.frame4.grid(row=3, column=0, columnspan=2, pady=5, padx=5, sticky="w")
-        self.errorbox = Label(self.frame4, text="No error", width=34, height=1, font="Calibri 20")
+        self.errorbox = Label(self.frame4, text="No error", width=31, height=1, font="Calibri 20")
         self.errorbox.grid(row=0, column=0, padx=self.padx, ipadx=5)
+        but = Button(self.frame4, text="R", width=3, height=1, command=self.updatecoms,font="Calibri 14")
+        but.grid(row=0, column=2)
         # Frame 4 End
 
         # Frame 5
@@ -84,10 +86,10 @@ class MyGui:
         canvas.create_image(0, 0, anchor=NW, image=self.img)
         # Frame 5 End
 
+
     def start(self):
 
         self.connection = Connection()
-        #self.update()
         self.window.mainloop()
         self.connection.kill()
 
@@ -108,8 +110,8 @@ class MyGui:
         self.DMM.grid(column=2, row=0, sticky="w", padx=self.padx, ipadx=1, ipady=2)
         self.DMM.config(width=9, height=1, highlightthickness=0, font="Calibri 14")
 
-    def update(self):
-
+    def updatecoms(self):
+        print("update")
         find_com = serial.tools.list_ports
         COM = find_com.comports()
         self.COM_LIST = []
@@ -118,7 +120,6 @@ class MyGui:
 
         if self.COM_LIST == []:
             self.COM_LIST.append("COM0")
-            self.errorbox["text"] = "No serial devices connected"
 
         self.dmmcom.set('')
         self.DMM['menu'].delete(0, 'end')
@@ -129,7 +130,6 @@ class MyGui:
             self.DMM['menu'].add_command(label=choice, command=tkinter._setit(self.dmmcom, choice))
 
         self.dmmcom.set(self.COM_LIST[0])
-        self.window.after(2000, self.update)
 
     def connect(self):
 
@@ -145,7 +145,7 @@ class MyGui:
 
             elif self.connection.ser == "error":
                 self.errorbox[
-                    "text"] = "There has been an error connecting to the Port \nmake sure you have choosen the right \nport and your device is properly connected"
+                    "text"] = "Problem connecting to Port"
 
         elif self.connectionstat == True:
 
@@ -176,7 +176,6 @@ class MyGui:
 
     def setvals(self):
 
-
         if self.connectionstat == False:
             self.errorbox["text"] = "Device is not Connected"
 
@@ -184,8 +183,8 @@ class MyGui:
             self.errorbox["text"] = ""
             voltage = float(self.inpv.get())
             self.connection.setvoltage(voltage)
-            #current = float(self.inpc.get())
-            #self.connection.setcurrent(current)
+            # current = float(self.inpc.get())
+            # self.connection.setcurrent(current)
 
 
 def main():
@@ -195,4 +194,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
