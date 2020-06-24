@@ -32,7 +32,7 @@ class Connection:
 
     def setvoltage(self, voltage):
         voltage = float(voltage)
-        command = "VSET:" + str(voltage) + '\r'
+        command = "VSET:" + str(voltage)
         command = command.encode()
         print(command)
         self.ser.write(command)
@@ -40,7 +40,7 @@ class Connection:
 
     def setcurrent(self, current):
         current = float(current)
-        command = "ISET:" + str(current) +'\r'
+        command = "ISET:" + str(current)
         command = command.encode()
         self.ser.write(command)
         self.readempty()
@@ -48,7 +48,6 @@ class Connection:
     def getvalues(self):
         self.ser.write(b'VOUT?')
         v = self.ser.readline()
-        # self.ser.readline()
         self.ser.write(b'IOUT?')
         i = self.ser.readline()
         self.readempty()
