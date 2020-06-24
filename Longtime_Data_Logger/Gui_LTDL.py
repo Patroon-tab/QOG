@@ -84,8 +84,16 @@ class MyGui:
         self.batlabel.grid(row=1, column=0)
         #self.batterystat = Progressbar(self.frame5, orient=HORIZONTAL, length=100, mode="determinate")
         #self.batterystat.grid(row=1, column=0, columnspan=2)
-
         # Frame5 End
+
+
+        #Test Frame
+        self.frametest = Frame(self.window)
+        self.frametest.grid(column = 0, row = 8)
+        but = Button(self.frametest, text = "Get Time", command = self.gettime())
+        print(self.time)
+
+        #Test Frame End
 
     def dropdowncom(self, frame):
 
@@ -117,6 +125,13 @@ class MyGui:
         dmm.finddevice()
         self.batlabel["text"]= "Battery: " +  str(dmm.getbattery()) + "%"
         dmm.kill()
+
+    def gettime(self):
+        d = self.dayE.get()
+        h = self.hourE.get()
+        m = self.minutesE.get()
+        self.time = d * 24 * 60 * 60 + h * 60 * 60 + m * 60
+
 
     def on_closing(self):
         if messagebox.askokcancel("Quit",
