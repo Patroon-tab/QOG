@@ -91,8 +91,8 @@ class MyGui:
         #Test Frame
         self.frametest = Frame(self.window)
         self.frametest.grid(column = 0, row = 8)
-        but = Button(self.frametest, text = "Get Time", command = self.gettime())
-        print(self.time)
+        but = Button(self.frametest, text = "Get Time", command = self.startmeas)
+        but.grid(row = 0, column = 0)
 
         #Test Frame End
 
@@ -128,10 +128,27 @@ class MyGui:
         dmm.kill()
 
     def gettime(self):
-        d = self.dayE.get()
-        h = self.hourE.get()
-        m = self.minutesE.get()
+
+        try:
+            d = int(self.dayE.get())
+        except:
+            d = 0
+
+        try:
+            h = int(self.hourE.get())
+        except:
+            h = 0
+        try:
+            m = int(self.minutesE.get())
+        except:
+            m = 0
+
         self.time = d * 24 * 60 * 60 + h * 60 * 60 + m * 60
+
+    def startmeas(self):
+        self.gettime()
+        print(self.time)
+
 
 
     def on_closing(self):
