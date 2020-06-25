@@ -11,9 +11,10 @@ from tkinter import messagebox
 import serial.tools.list_ports
 from Keysight_U1252B.Communication import Connection
 from tkinter import *
-
-
-
+import os, sys
+import threading
+from threading import Thread
+import time
 
 
 class MyGui:
@@ -83,18 +84,17 @@ class MyGui:
         self.dropdowncom(self.frame5)
         self.batlabel = Label(self.frame5, text="Battery: n/a %")
         self.batlabel.grid(row=1, column=0)
-        #self.batterystat = Progressbar(self.frame5, orient=HORIZONTAL, length=100, mode="determinate")
-        #self.batterystat.grid(row=1, column=0, columnspan=2)
+        # self.batterystat = Progressbar(self.frame5, orient=HORIZONTAL, length=100, mode="determinate")
+        # self.batterystat.grid(row=1, column=0, columnspan=2)
         # Frame5 End
 
-
-        #Test Frame
+        # Test Frame
         self.frametest = Frame(self.window)
-        self.frametest.grid(column = 0, row = 8)
-        but = Button(self.frametest, text = "Get Time", command = self.startmeas)
-        but.grid(row = 0, column = 0)
+        self.frametest.grid(column=0, row=8)
+        but = Button(self.frametest, text="Start", command=self.startmeas)
+        but.grid(row=0, column=0)
 
-        #Test Frame End
+        # Test Frame End
 
     def dropdowncom(self, frame):
 
@@ -113,6 +113,48 @@ class MyGui:
         self.DMM.grid(column=0, row=0)
         self.DMM.config(width=9, height=1, highlightthickness=0, font="Calibri 14")
 
+    def updatecoms(self):
+        print("update")
+        find_com = serial.tools.list_ports
+        COM = find_com.comports()
+        self.COM_LIST = []
+        for x in COM:
+            self.COM_LIST.append(x[0])
+
+        if self.COM_LIST == []:
+            self.COM_LIST.append("COM0")
+
+        self.dmmcom.set('')
+        self.DMM['menu'].delete(0, 'end')
+
+        new_choices = self.COM_LIST
+
+        for choice in new_choices:
+            self.DMM['menu'].add_command(label=choice, command=tkinter._setit(self.dmmcom, choice))
+
+        self.dmmcom.set(self.COM_LIST[0])
+
+    def updatecoms(self):
+        print("update")
+        find_com = serial.tools.list_ports
+        COM = find_com.comports()
+        self.COM_LIST = []
+        for x in COM:
+            self.COM_LIST.append(x[0])
+
+        if self.COM_LIST == []:
+            self.COM_LIST.append("COM0")
+
+        self.dmmcom.set('')
+        self.DMM['menu'].delete(0, 'end')
+
+        new_choices = self.COM_LIST
+
+        for choice in new_choices:
+            self.DMM['menu'].add_command(label=choice, command=tkinter._setit(self.dmmcom, choice))
+
+        self.dmmcom.set(self.COM_LIST[0])
+
     def start(self):
         self.window.mainloop()
 
@@ -124,7 +166,7 @@ class MyGui:
         dmm = Connection()
         dmm.initialize(self.dmmcom.get())
         dmm.finddevice()
-        self.batlabel["text"]= "Battery: " +  str(dmm.getbattery()) + "%"
+        self.batlabel["text"] = "Battery: " + str(dmm.getbattery()) + "%"
         dmm.kill()
 
     def gettime(self):
@@ -139,20 +181,30 @@ class MyGui:
         except:
             h = 0
         try:
-            m = int(self.minutesE.get())
+            m = float(self.minutesE.get())
         except:
             m = 0
+        try:
+            timeb = float(self.entryT.get())
+        except:
+            timeb = 3
 
         self.time = d * 24 * 60 * 60 + h * 60 * 60 + m * 60
+        self.timebet = timeb
 
     def startmeas(self):
         self.gettime()
         print(self.time)
 
+    def sleep(self, x):
 
+        for y in range(x * 1000):
+            time.sleep(0.001)
+            self.window.update()
 
     def on_closing(self):
         if messagebox.askokcancel("Quit",
+
                                   "Do you want to quit?\n some meassurement will be lost\n and the programm will stop meassuring"):
             self.window.destroy()
 
