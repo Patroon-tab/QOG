@@ -196,7 +196,7 @@ class MyGui:
         path = self.filename + "/measurement.txt"
         file = open(path, "w")
         file.write(self.headerentry.get('1.0', END) + "\n")
-        file.write("Meassurement[n]; Time[s], Value, Unit \n")
+        file.write("Meassurement[n]; Time[s]; Value; Unit \n")
         file.close()
         com = self.dmmcom.get()
         self.dmm.initialize(com)
