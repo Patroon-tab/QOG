@@ -159,11 +159,11 @@ class MyGui:
         print(self.filename)
 
     def ping(self):
-        dmm = Connection()
-        dmm.initialize(self.dmmcom.get())
-        dmm.finddevice()
-        self.batlabel["text"] = "Battery: " + str(dmm.getbattery()) + "%"
-        dmm.kill()
+        self.dmm = Connection()
+        self.dmm.initialize(self.dmmcom.get())
+        self.dmm.finddevice()
+        self.batlabel["text"] = "Battery: " + str(self.dmm.getbattery()) + "%"
+        self.dmm.kill()
 
     def gettime(self):
 
@@ -185,20 +185,37 @@ class MyGui:
             timeb = 3
 
         self.time = d * 24 * 60 * 60 + h * 60 * 60 + m * 60
-        self.timebet = timeb*60
+        self.timebet = timeb * 60
 
     def startmeas(self):
         self.gettime()
-        numberofmeas = self.time/self.timebet
+        numberofmeas = self.time / self.timebet
         numberofmeas = int(numberofmeas)
         print(numberofmeas)
         time = 0
+        path = self.filename + "/measurement.txt"
+        file = open(path, "w")
+        file.write(self.headerentry.get('1.0', END) + "\n")
+        file.write("Meassurement[n]; Time[s], Value, Unit \n")
+        file.close()
+        com = self.dmmcom.get()
+        self.dmm.initialize(com)
+        unitdmm = self.dmm.getsetup()[0]
+
         for x in range(numberofmeas):
+            self.dmm.initialize(com)
+            value = self.dmm.getValue()
+            self.dmm.kill()
+            file = open(path, "a")
             print(x, time)
+            linewr = ("%d;%.3f;%.6f;%s \n" %(x, time, value, unitdmm))
+            print(linewr)
+            file.write(linewr)
+            file.close()
             self.sleep(self.timebet)
             time = time + self.timebet
 
-
+        file.close()
 
     def sleep(self, x):
 
