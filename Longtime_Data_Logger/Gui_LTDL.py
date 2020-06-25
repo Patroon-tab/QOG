@@ -4,16 +4,12 @@ Created on Fri Jun 12 10:14:08 2020
 
 @author: Patrick
 """
-from tkinter import *
 from tkinter.scrolledtext import ScrolledText
 from tkinter import filedialog
 from tkinter import messagebox
 import serial.tools.list_ports
 from Keysight_U1252B.Communication import Connection
 from tkinter import *
-import os, sys
-import threading
-from threading import Thread
 import time
 
 
@@ -175,7 +171,6 @@ class MyGui:
             d = int(self.dayE.get())
         except:
             d = 0
-
         try:
             h = int(self.hourE.get())
         except:
@@ -190,17 +185,29 @@ class MyGui:
             timeb = 3
 
         self.time = d * 24 * 60 * 60 + h * 60 * 60 + m * 60
-        self.timebet = timeb
+        self.timebet = timeb*60
 
     def startmeas(self):
         self.gettime()
-        print(self.time)
+        numberofmeas = self.time/self.timebet
+        numberofmeas = int(numberofmeas)
+        print(numberofmeas)
+        time = 0
+        for x in range(numberofmeas):
+            print(x, time)
+            self.sleep(self.timebet)
+            time = time + self.timebet
+
+
 
     def sleep(self, x):
 
-        for y in range(x * 1000):
+        duration = 0
+        start = time.perf_counter()
+        while duration <= x:
             time.sleep(0.001)
             self.window.update()
+            duration = time.perf_counter() - start
 
     def on_closing(self):
         if messagebox.askokcancel("Quit",
