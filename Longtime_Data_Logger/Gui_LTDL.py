@@ -89,6 +89,8 @@ class MyGui:
         self.frametest.grid(column=0, row=8)
         but = Button(self.frametest, text="Start", command=self.startmeas)
         but.grid(row=0, column=0)
+        self.percentlab = Label(self.frametest, text = "0%")
+        self.percentlab.grid(row = 0, column = 1)
 
         # Test Frame End
 
@@ -214,6 +216,8 @@ class MyGui:
             file.close()
             self.sleep(self.timebet)
             time = time + self.timebet
+            percent = (x/numberofmeas)*100
+            self.percentlab["text"] = ("%.2f%" %percent) #Showing percentage in Gui
 
         file.close()
 
