@@ -273,7 +273,7 @@ class MyGui:
 
         window2.mainloop()
 
-        #TODO
+        # TODO
 
 
 def main():

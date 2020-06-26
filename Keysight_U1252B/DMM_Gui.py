@@ -51,7 +51,6 @@ class MyGui:
         dmm.finddevice()
         dmm.kill()
 
-
     def getvalues(self):
 
         dmm = Connection()
@@ -67,8 +66,6 @@ class MyGui:
             self.dmmval.config(text="Error")
 
 
-
-
 def main():
     window = Tk()
     MyGui(window)
@@ -77,4 +74,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

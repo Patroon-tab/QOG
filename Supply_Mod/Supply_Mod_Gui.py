@@ -73,7 +73,7 @@ class MyGui:
         self.frame4.grid(row=3, column=0, columnspan=2, pady=5, padx=5, sticky="w")
         self.errorbox = Label(self.frame4, text="No error", width=31, height=1, font="Calibri 20")
         self.errorbox.grid(row=0, column=0, padx=self.padx, ipadx=5)
-        but = Button(self.frame4, text="R", width=3, height=1, command=self.updatecoms,font="Calibri 14")
+        but = Button(self.frame4, text="R", width=3, height=1, command=self.updatecoms, font="Calibri 14")
         but.grid(row=0, column=2)
         # Frame 4 End
 
@@ -85,7 +85,6 @@ class MyGui:
         self.img = PhotoImage(file="pic.png")
         canvas.create_image(0, 0, anchor=NW, image=self.img)
         # Frame 5 End
-
 
     def start(self):
 

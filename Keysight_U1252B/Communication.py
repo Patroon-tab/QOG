@@ -26,7 +26,6 @@ class Connection:
         except:
             pass
 
-
     def decodein(self, x):
         x = x.strip(b"""\r\n""")
         x = x.decode("utf-8")
@@ -78,10 +77,10 @@ class Connection:
         x = self.decodein(x)
         x = float(x)
         return x
-        
 
     def kill(self):
         self.ser.close()
+
 
 def main():
     dmm = Connection()
