@@ -110,7 +110,7 @@ class MyGui:
         self.DMM.config(width=9, height=1, highlightthickness=0, font="Calibri 14")
 
     def updatecoms(self):
-        print("update")
+        #print("update")
         find_com = serial.tools.list_ports
         COM = find_com.comports()
         self.COM_LIST = []
