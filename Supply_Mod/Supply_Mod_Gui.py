@@ -170,8 +170,8 @@ class MyGui:
 
             else:
 
-                self.isv["text"] = vals[0]
-                self.isi["text"] = vals[1]
+                self.isv["text"] = vals[1]
+                self.isi["text"] = vals[0]
 
     def setvals(self):
 
