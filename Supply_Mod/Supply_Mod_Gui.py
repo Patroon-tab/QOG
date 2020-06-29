@@ -126,7 +126,7 @@ class MyGui:
         new_choices = self.COM_LIST
 
         for choice in new_choices:
-            self.DMM['menu'].add_command(label=choice, command=tkinter._setit(self.dmmcom, choice))
+            self.DMM['menu'].add_command(label=choice, command=lambda v=self.dmmcom, l=choice: v.set(l))
 
         self.dmmcom.set(self.COM_LIST[0])
 

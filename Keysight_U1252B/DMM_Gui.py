@@ -13,9 +13,11 @@ import serial.tools.list_ports
 
 class MyGui:
 
-    def __init__(self, window):
+    def __init__(self):
 
-        self.window = window
+        self.window = Tk()
+        self.window.title("Keysight_U1252B Gui V0.9")
+        self.window.iconbitmap("icon2.ico")
         self.dropdowncom()
 
         lab = Label(self.window, text="Choose Com -->")
@@ -36,14 +38,42 @@ class MyGui:
         find_com = serial.tools.list_ports
         COM = find_com.comports()
         COM_LIST = []
-        for x in COM:
-            COM_LIST.append(x[0])
+
+        if COM == []:
+            COM_LIST.append("COM0")
+        else:
+
+            for x in COM:
+                COM_LIST.append(x[0])
 
         self.dmmcom = StringVar(self.window)
         self.dmmcom.set(COM_LIST[0])
         self.DMM = OptionMenu(self.window, self.dmmcom, *COM_LIST)
         self.DMM.grid(column=1, row=0, sticky="w")
         self.DMM.config(width=11)
+
+    def updatecoms(self):
+
+        print("update")
+        find_com = serial.tools.list_ports
+        COM = find_com.comports()
+        self.COM_LIST = []
+        for x in COM:
+            self.COM_LIST.append(x[0])
+
+        if self.COM_LIST == []:
+            self.COM_LIST.append("COM0")
+
+        self.dmmcom.set('')
+        self.DMM['menu'].delete(0, 'end')
+
+        new_choices = self.COM_LIST
+
+        for choice in new_choices:
+            self.DMM['menu'].add_command(label=choice, command=lambda v=self.dmmcom, l=choice: v.set(l))
+
+        self.dmmcom.set(self.COM_LIST[0])
+        self.window.after(1000, self.updatecoms)
 
     def pingdmm(self):
         dmm = Connection()
@@ -65,11 +95,14 @@ class MyGui:
         else:
             self.dmmval.config(text="Error")
 
+    def start(self):
+        self.updatecoms()
+        self.window.mainloop()
+
 
 def main():
-    window = Tk()
-    MyGui(window)
-    window.mainloop()
+    window = MyGui()
+    window.start()
 
 
 if __name__ == '__main__':
