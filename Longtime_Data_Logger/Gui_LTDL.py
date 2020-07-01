@@ -226,7 +226,7 @@ class MyGui:
         duration = 0
         start = time.perf_counter()
         while duration <= x:
-            time.sleep(0.001)
+            time.sleep(0.005)
             self.window.update()
             duration = time.perf_counter() - start
 
