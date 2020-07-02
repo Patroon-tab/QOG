@@ -84,11 +84,9 @@ class MyGui:
         # Frame 5
         self.frame5 = Frame(self.window, bg=self.bg)
         self.frame5.grid(row=0, column=0, rowspan=3)
-        canvas = Canvas(self.frame5, width=208, height=182, bd=0, highlightthickness=0, relief='ridge')
-        canvas.grid(row=0, column=0, padx=(10, 0))
-        self.img = Image.open("pic.png")
-        self.img = self.img.resize((208, 182))
-        self.img = ImageTk.PhotoImage(self.img)
+        canvas = Canvas(self.frame5, width=208, height=183, bd=0, highlightthickness=0, relief='ridge', bg=self.bg)
+        canvas.grid(row=0, column=0, padx=(10, 0), pady=(7, 7))
+        self.img = ImageTk.PhotoImage(Image.open("pic2.png"))
         canvas.create_image(0, 0, anchor=NW, image=self.img)
 
         # Frame 5 End
