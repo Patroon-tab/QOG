@@ -13,6 +13,7 @@ import serial
 import time
 
 
+# noinspection PyAttributeOutsideInit
 class MyGui:
 
     def __init__(self):
@@ -69,21 +70,24 @@ class MyGui:
         # Frame 3 End
 
         # Frame 4
+
         self.frame4 = Frame(self.window, bg=self.bg)
         self.frame4.grid(row=3, column=0, columnspan=2, pady=5, padx=5, sticky="w")
         self.errorbox = Label(self.frame4, text="No error", width=31, height=1, font="Calibri 20")
         self.errorbox.grid(row=0, column=0, padx=self.padx, ipadx=5)
         but = Button(self.frame4, text="R", width=3, height=1, command=self.updatecoms, font="Calibri 14")
         but.grid(row=0, column=2)
+
         # Frame 4 End
 
         # Frame 5
         self.frame5 = Frame(self.window, bg=self.bg)
         self.frame5.grid(row=0, column=0, rowspan=3)
-        canvas = Canvas(self.frame5, width=208, height=156, bd=0, highlightthickness=0, relief='ridge')
+        canvas = Canvas(self.frame5, width=208, height=182, bd=0, highlightthickness=0, relief='ridge')
         canvas.grid(row=0, column=0, padx=(10, 0))
         self.img = PhotoImage(file="pic.png")
         canvas.create_image(0, 0, anchor=NW, image=self.img)
+
         # Frame 5 End
 
     def start(self):
@@ -109,8 +113,9 @@ class MyGui:
         self.DMM.grid(column=2, row=0, sticky="w", padx=self.padx, ipadx=1, ipady=2)
         self.DMM.config(width=9, height=1, highlightthickness=0, font="Calibri 14")
 
+    # noinspection DuplicatedCode
     def updatecoms(self):
-        #print("update")
+        # print("update")
         find_com = serial.tools.list_ports
         COM = find_com.comports()
         self.COM_LIST = []
