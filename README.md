@@ -19,7 +19,7 @@ probably already installed by default except Pyinstaller and Pyqt5.
 
 -----------------------------------------------------------------------
 
-Devices you can controll and/or read with this repositories:
+Devices you can controll and/or read with this repository:
 
 - SupplyMod by Alexander Frank (Powersupply)
 - RND_320_KD3005P(Powersupply)
