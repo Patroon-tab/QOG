@@ -11,6 +11,7 @@ import serial.tools.list_ports
 from Supply_Mod import Connection
 import serial
 import time
+from PIL import Image, ImageTk
 
 
 # noinspection PyAttributeOutsideInit
@@ -85,7 +86,9 @@ class MyGui:
         self.frame5.grid(row=0, column=0, rowspan=3)
         canvas = Canvas(self.frame5, width=208, height=182, bd=0, highlightthickness=0, relief='ridge')
         canvas.grid(row=0, column=0, padx=(10, 0))
-        self.img = PhotoImage(file="pic.png")
+        self.img = Image.open("pic.png")
+        self.img = self.img.resize((208, 182))
+        self.img = ImageTk.PhotoImage(self.img)
         canvas.create_image(0, 0, anchor=NW, image=self.img)
 
         # Frame 5 End
