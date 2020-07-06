@@ -21,7 +21,7 @@ probably already installed by default except Pyinstaller and Pyqt5.
 
 Devices you can controll and/or read with this repository:
 
-- SupplyMod by Alexander Frank (Powersupply)
+- SupplyMod / Arduino Power Supply(Powersupply)
 - RND_320_KD3005P(Powersupply)
 - Keysight U1252B(DMM)
 - UT61B(DMM)
