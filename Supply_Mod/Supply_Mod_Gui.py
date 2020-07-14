@@ -125,6 +125,9 @@ class MyGui:
 
         if self.COM_LIST == []:
             self.COM_LIST.append("COM0")
+            self.errorbox["text"] = "No device Connected"
+        else:
+            self.errorbox["text"] = ""
 
         self.dmmcom.set('')
         self.DMM['menu'].delete(0, 'end')
