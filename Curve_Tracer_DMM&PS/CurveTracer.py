@@ -202,6 +202,7 @@ class MyGui:
         progress = 0
 
         ps = ConnectionPS()
+        ps.initialize(self.pscom.get())
         ps.setvoltage(0)
         time.sleep(2)
 
@@ -273,7 +274,7 @@ class MyGui:
 
         window2.mainloop()
 
-        # TODO
+        #TODO
 
 
 def main():
