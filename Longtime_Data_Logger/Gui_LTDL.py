@@ -217,7 +217,7 @@ class MyGui:
             self.sleep(self.timebet)
             time = time + self.timebet
             percent = (x / numberofmeas) * 100
-            self.percentlab["text"] = ("%.2f%" % percent)  # Showing percentage in Gui
+            self.percentlab["text"] = ("%.2f" % percent)  # Showing percentage in Gui
 
         file.close()
 
@@ -225,10 +225,12 @@ class MyGui:
 
         duration = 0
         start = time.perf_counter()
+        print("sleep")
         while duration <= x:
-            time.sleep(0.001)
+            time.sleep(0.005)
             self.window.update()
             duration = time.perf_counter() - start
+
 
     def on_closing(self):
         if messagebox.askokcancel("Quit",

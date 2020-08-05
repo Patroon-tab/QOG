@@ -23,8 +23,10 @@ class Connection:
             self.ser = serial.Serial(self.port, 9600, timeout=1)
             time.sleep(delay)
 
-        except:
+        except Exception as e:
             pass
+            print("excpet")
+            print(e)
 
     def decodein(self, x):
         x = x.strip(b"""\r\n""")
