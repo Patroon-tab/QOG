@@ -4,6 +4,10 @@ Created on Fri Jun 12 10:14:08 2020
 
 @author: Patrick
 """
+
+"""
+IMPORTANT NOTE: To make this guy look better there is still some work to do. Software works it just doesn't look that nice yet
+"""
 from tkinter.scrolledtext import ScrolledText
 from tkinter import filedialog
 from tkinter import messagebox
@@ -11,6 +15,12 @@ import serial.tools.list_ports
 from Keysight_U1252B.Communication import Connection
 from tkinter import *
 import time
+from matplotlib.backends.backend_tkagg import (
+    FigureCanvasTkAgg, NavigationToolbar2Tk)
+
+from matplotlib.figure import Figure
+
+import numpy as np
 
 
 class MyGui:
@@ -28,7 +38,7 @@ class MyGui:
         self.frame1.grid(row=0, column=0)
 
         lab = Label(self.frame1, text="File Header:", font="calibri 20", width=10, height=1, anchor="e")
-        lab.grid(row=0, column=0, sticky="E")
+        lab.grid(row=0, column=0, sticky="E", pady=15)
 
         self.headerentry = ScrolledText(self.frame1, height=3, width=20)
         self.headerentry.grid(row=0, column=1, sticky="E")
@@ -37,7 +47,7 @@ class MyGui:
         lab.grid(row=1, column=0)
         buttonpath = Button(self.frame1, text="Browse", command=self.browse_button, font="calibri 20", width=11,
                             height=1, anchor="center")
-        buttonpath.grid(row=1, column=1, sticky="w")
+        buttonpath.grid(row=1, column=1, sticky="w", pady=(0,5))
         # Frame1 End
 
         # Frame3
@@ -69,29 +79,32 @@ class MyGui:
 
         # Frame5 Start
         self.frame5 = Frame(self.window)
-        self.frame5.grid(row=4, column=0)
+        self.frame5.grid(row=3, column=0)
         lab = Label(self.frame5, text="DMM:", font="calibri 20")
-        lab.grid(row=0, column=0, sticky="e")
+        lab.grid(row=0, column=0, sticky="e",padx=10)
         but = Button(self.frame5, text="Ping", command=self.ping, font="calibri 12",pady=2)
-        but.grid(row=0, column=3)
+        but.grid(row=0, column=3,padx=10)
         but = Button(self.frame5, text="R", command=self.ping, font="calibri 12", pady=2)
-        but.grid(row=0, column=4)
+        but.grid(row=0, column=4,padx=10)
         self.dropdowncom(self.frame5)
-        self.batlabel = Label(self.frame5, text="Battery: n/a %")
-        self.batlabel.grid(row=1, column=0)
+
         # self.batterystat = Progressbar(self.frame5, orient=HORIZONTAL, length=100, mode="determinate")
         # self.batterystat.grid(row=1, column=0, columnspan=2)
         # Frame5 End
 
-        # Test Frame
-        self.frametest = Frame(self.window)
-        self.frametest.grid(column=0, row=8)
-        but = Button(self.frametest, text="Start", command=self.startmeas)
-        but.grid(row=0, column=0)
-        self.percentlab = Label(self.frametest, text="0%")
-        self.percentlab.grid(row=0, column=1)
+        # Frame7
 
-        # Test Frame End
+        self.frame7 = Frame(self.window)
+        self.frame7.grid(column=1, row=3)
+        self.batlabel = Label(self.frame7, text="Battery: n/a %", font="calibri 15")
+        self.batlabel.grid(row=0, column=1,padx=20)
+        but = Button(self.frame7, text="Start", command=self.startmeas,font="calibri 15")
+        but.grid(row=0, column=2,padx=(10,0))
+        self.percentlab = Label(self.frame7, text="Progress: 0%",font="calibri 15")
+        self.percentlab.grid(row=0, column=0,padx=(0,10))
+
+        # Frame7 End
+        self.graph()
 
     def dropdowncom(self, frame):
 
@@ -186,7 +199,7 @@ class MyGui:
             timeb = 3
 
         self.time = d * 24 * 60 * 60 + h * 60 * 60 + m * 60
-        self.timebet = timeb * 60
+        self.timebet = timeb
 
     def startmeas(self):
         self.gettime()
@@ -216,9 +229,24 @@ class MyGui:
             self.sleep(self.timebet)
             time = time + self.timebet
             percent = (x / numberofmeas) * 100
-            self.percentlab["text"] = ("%.2f" % percent)  # Showing percentage in Gui
+            self.percentlab["text"] = ("Progress: %.2f" % percent)  # Showing percentage in Gui
 
         file.close()
+
+    def graph(self):
+        self.frame6 = Frame(self.window)
+        self.frame6.grid(row=0, column=1, rowspan=3)
+        fig = Figure(figsize=(4, 3), dpi=100)
+        t = np.arange(0, 3, .01)
+        fig.add_subplot(111).plot(t, 2 * np.sin(2 * np.pi * t))
+
+        canvas = FigureCanvasTkAgg(fig, master=self.frame6)  # A tk.DrawingArea.
+        canvas.draw()
+        canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
+
+        toolbar = NavigationToolbar2Tk(canvas, self.frame6)
+        toolbar.update()
+        canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
 
     def sleep(self, x):
 
