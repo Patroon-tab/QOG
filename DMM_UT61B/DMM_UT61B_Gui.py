@@ -63,7 +63,7 @@ class MyGui:
             self.DMM['menu'].add_command(label=choice, command=lambda v=self.dmmcom, l=choice: v.set(l))
 
         self.dmmcom.set(self.COM_LIST[0])
-        self.window.after(1000, self.updatecoms)
+        #self.window.after(1000, self.updatecoms)
 
     def getvalues(self):
 

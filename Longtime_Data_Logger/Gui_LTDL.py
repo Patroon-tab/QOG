@@ -27,56 +27,55 @@ class MyGui:
         self.frame1 = Frame(self.window)
         self.frame1.grid(row=0, column=0)
 
-        lab = Label(self.frame1, text="File Header:", font="calibri 20", width=10, height=1)
-        lab.grid(row=0, column=0)
+        lab = Label(self.frame1, text="File Header:", font="calibri 20", width=10, height=1, anchor="e")
+        lab.grid(row=0, column=0, sticky="E")
 
         self.headerentry = ScrolledText(self.frame1, height=3, width=20)
-        self.headerentry.grid(row=0, column=1)
-        # Frame1 End
+        self.headerentry.grid(row=0, column=1, sticky="E")
 
-        # Frame2
-        self.frame2 = Frame(self.window)
-        self.frame2.grid(row=1, column=0)
-        lab = Label(self.frame2, text="Path:", font="calibri 20")
-        lab.grid(row=0, column=0)
-        buttonpath = Button(self.frame2, text="Browse", command=self.browse_button, font="calibri 20", width=7,
-                            height=1)
-        buttonpath.grid(row=0, column=1)
-        # Frame2 End
+        lab = Label(self.frame1, text="File Path:", font="calibri 20", width=10, height=1, anchor="e")
+        lab.grid(row=1, column=0)
+        buttonpath = Button(self.frame1, text="Browse", command=self.browse_button, font="calibri 20", width=11,
+                            height=1, anchor="center")
+        buttonpath.grid(row=1, column=1, sticky="w")
+        # Frame1 End
 
         # Frame3
         widthtime = 3
         self.frame3 = Frame(self.window)
-        self.frame3.grid(row=2, column=0)
+        self.frame3.grid(row=1, column=0)
+        lab = Label(self.frame3, text="Duration:", font="calibri 20", width=8, height=1)
+        lab.grid(row=1, column=0, sticky="e", padx=(0, 20))
         self.dayE = Entry(self.frame3, width=widthtime)
-        self.dayE.grid(row=0, column=1)
-        lab = Label(self.frame3, text="Days:")
-        lab.grid(row=0, column=0)
+        self.dayE.grid(row=0, column=2, padx=(5, 18))
+        lab = Label(self.frame3, text="Days:", font="calibri 15")
+        lab.grid(row=0, column=1, sticky="e")
         self.hourE = Entry(self.frame3, width=widthtime)
-        self.hourE.grid(row=0, column=3)
-        lab = Label(self.frame3, text="Hours:")
-        lab.grid(row=0, column=2)
+        self.hourE.grid(row=1, column=2, padx=(5, 18))
+        lab = Label(self.frame3, text="Hours:", font="calibri 15")
+        lab.grid(row=1, column=1, sticky="e")
         self.minutesE = Entry(self.frame3, width=widthtime)
-        self.minutesE.grid(row=0, column=5)
-        lab = Label(self.frame3, text="Minutes:")
-        lab.grid(row=0, column=4)
-        # Fram3 End
+        self.minutesE.grid(row=2, column=2, padx=(5, 18))
+        lab = Label(self.frame3, text="Minutes:", font="calibri 15")
+        lab.grid(row=2, column=1, sticky="e")
+        lab = Label(self.frame3, text="Interval:", font="calibri 20")
+        lab.grid(row=3, column=0, padx=(0, 20))
+        lab = Label(self.frame3, text="Seconds:", font="calibri 15")
+        lab.grid(row=3, column=1, sticky="e")
+        self.entryT = Entry(self.frame3, width=widthtime)
+        self.entryT.grid(row=3, column=2, padx=(5, 18))
 
-        # Frame4 Start
-        self.frame4 = Frame(self.window)
-        self.frame4.grid(row=3, column=0)
-        lab = Label(self.frame4, text="Time between meassurements[min]:")
-        lab.grid(row=0, column=0, columnspan=2)
-        self.entryT = Entry(self.frame4, width=4)
-        self.entryT.grid(row=0, column=2)
-
-        # Frame4 End
+        # Frame3 End
 
         # Frame5 Start
         self.frame5 = Frame(self.window)
         self.frame5.grid(row=4, column=0)
-        but = Button(self.frame5, text="Ping", command=self.ping)
-        but.grid(row=0, column=1)
+        lab = Label(self.frame5, text="DMM:", font="calibri 20")
+        lab.grid(row=0, column=0, sticky="e")
+        but = Button(self.frame5, text="Ping", command=self.ping, font="calibri 12",pady=2)
+        but.grid(row=0, column=3)
+        but = Button(self.frame5, text="R", command=self.ping, font="calibri 12", pady=2)
+        but.grid(row=0, column=4)
         self.dropdowncom(self.frame5)
         self.batlabel = Label(self.frame5, text="Battery: n/a %")
         self.batlabel.grid(row=1, column=0)
@@ -108,8 +107,8 @@ class MyGui:
         self.dmmcom = StringVar(self.window)
         self.dmmcom.set(self.COM_LIST[0])
         self.DMM = OptionMenu(frame, self.dmmcom, *self.COM_LIST)
-        self.DMM.grid(column=0, row=0)
-        self.DMM.config(width=9, height=1, highlightthickness=0, font="Calibri 14")
+        self.DMM.grid(column=1, row=0, sticky="e")
+        self.DMM.config(width=5, height=1, highlightthickness=0, font="Calibri 14")
 
     def updatecoms(self):
         print("update")
@@ -230,7 +229,6 @@ class MyGui:
             time.sleep(0.005)
             self.window.update()
             duration = time.perf_counter() - start
-
 
     def on_closing(self):
         if messagebox.askokcancel("Quit",
