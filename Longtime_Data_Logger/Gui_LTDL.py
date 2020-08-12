@@ -8,17 +8,19 @@ Created on Fri Jun 12 10:14:08 2020
 """
 IMPORTANT NOTE: To make this guy look better there is still some work to do. Software works it just doesn't look that nice yet
 """
+import time
+from tkinter import *
 from tkinter.scrolledtext import ScrolledText
 from tkinter import filedialog
 from tkinter import messagebox
 import serial.tools.list_ports
-from Keysight_U1252B.Communication import Connection
-from tkinter import *
-import time
+from matplotlib import style
+style.use('ggplot')
 from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
 
 from matplotlib.figure import Figure
+from Keysight_U1252B.Communication import Connection
 
 import numpy as np
 
@@ -28,6 +30,8 @@ class MyGui:
     def __init__(self):
         self.window = Tk()
         self.window.protocol("WM_DELETE_WINDOW", self.on_closing)
+        self.xvals = []
+        self.yvals = []
 
         """
         but = Button(self.window, text = "Start", font = "Calibri 20", width = 6, height = 1)
@@ -47,7 +51,7 @@ class MyGui:
         lab.grid(row=1, column=0)
         buttonpath = Button(self.frame1, text="Browse", command=self.browse_button, font="calibri 20", width=11,
                             height=1, anchor="center")
-        buttonpath.grid(row=1, column=1, sticky="w", pady=(0,5))
+        buttonpath.grid(row=1, column=1, sticky="w", pady=(0, 5))
         # Frame1 End
 
         # Frame3
@@ -81,11 +85,11 @@ class MyGui:
         self.frame5 = Frame(self.window)
         self.frame5.grid(row=3, column=0)
         lab = Label(self.frame5, text="DMM:", font="calibri 20")
-        lab.grid(row=0, column=0, sticky="e",padx=10)
-        but = Button(self.frame5, text="Ping", command=self.ping, font="calibri 12",pady=2)
-        but.grid(row=0, column=3,padx=10)
+        lab.grid(row=0, column=0, sticky="e", padx=10)
+        but = Button(self.frame5, text="Ping", command=self.ping, font="calibri 12", pady=2)
+        but.grid(row=0, column=3, padx=10)
         but = Button(self.frame5, text="R", command=self.ping, font="calibri 12", pady=2)
-        but.grid(row=0, column=4,padx=10)
+        but.grid(row=0, column=4, padx=10)
         self.dropdowncom(self.frame5)
 
         # self.batterystat = Progressbar(self.frame5, orient=HORIZONTAL, length=100, mode="determinate")
@@ -97,14 +101,26 @@ class MyGui:
         self.frame7 = Frame(self.window)
         self.frame7.grid(column=1, row=3)
         self.batlabel = Label(self.frame7, text="Battery: n/a %", font="calibri 15")
-        self.batlabel.grid(row=0, column=1,padx=20)
-        but = Button(self.frame7, text="Start", command=self.startmeas,font="calibri 15")
-        but.grid(row=0, column=2,padx=(10,0))
-        self.percentlab = Label(self.frame7, text="Progress: 0%",font="calibri 15")
-        self.percentlab.grid(row=0, column=0,padx=(0,10))
+        self.batlabel.grid(row=0, column=1, padx=20)
+        but = Button(self.frame7, text="Start", command=self.startmeas, font="calibri 15")
+        but.grid(row=0, column=2, padx=(10, 0))
+        self.percentlab = Label(self.frame7, text="Progress: 0%", font="calibri 15")
+        self.percentlab.grid(row=0, column=0, padx=(0, 10))
 
-        # Frame7 End
-        self.graph()
+        # Frame Graph
+
+        self.frame8 = Frame(self.window)
+        self.frame8.grid(row=0, column=1, rowspan=2)
+
+        self.fig = Figure(figsize=(5, 4), dpi=100)
+        self.suba = self.fig.add_subplot(111)
+
+        self.canvas = FigureCanvasTkAgg(self.fig, master=self.frame8)
+        self.canvas.draw()
+        self.canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
+
+
+        # Frame Graph End
 
     def dropdowncom(self, frame):
 
@@ -169,10 +185,12 @@ class MyGui:
         self.window.mainloop()
 
     def browse_button(self):
+        print("Browse")
         self.filename = filedialog.askdirectory()
         print(self.filename)
 
     def ping(self):
+
         self.dmm = Connection()
         self.dmm.initialize(self.dmmcom.get())
         self.dmm.finddevice()
@@ -202,6 +220,9 @@ class MyGui:
         self.timebet = timeb
 
     def startmeas(self):
+        self.suba.clear()
+
+        print("clear")
         self.gettime()
         numberofmeas = self.time / self.timebet
         numberofmeas = int(numberofmeas)
@@ -215,6 +236,9 @@ class MyGui:
         com = self.dmmcom.get()
         self.dmm.initialize(com)
         unitdmm = self.dmm.getsetup()[0]
+        self.xvals = []
+        self.yvals = []
+
 
         for x in range(numberofmeas):
             self.dmm.initialize(com)
@@ -223,30 +247,30 @@ class MyGui:
             file = open(path, "a")
             print(x, time)
             linewr = ("%d;%.3f;%.6f;%s \n" % (x, time, value, unitdmm))
+            self.xvals.append(time)
+            self.yvals.append(value)
             print(linewr)
             file.write(linewr)
             file.close()
-            self.sleep(self.timebet)
-            time = time + self.timebet
+            self.suba.plot(self.xvals, self.yvals, color="blue")
+            self.canvas.draw()
             percent = (x / numberofmeas) * 100
             self.percentlab["text"] = ("Progress: %.2f" % percent)  # Showing percentage in Gui
+            self.sleep(self.timebet)
+            time = time + self.timebet
+
+
 
         file.close()
 
-    def graph(self):
-        self.frame6 = Frame(self.window)
-        self.frame6.grid(row=0, column=1, rowspan=3)
-        fig = Figure(figsize=(4, 3), dpi=100)
-        t = np.arange(0, 3, .01)
-        fig.add_subplot(111).plot(t, 2 * np.sin(2 * np.pi * t))
+    def rgraph(self):
 
-        canvas = FigureCanvasTkAgg(fig, master=self.frame6)  # A tk.DrawingArea.
-        canvas.draw()
-        canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
+        self.fig = Figure(figsize=(5, 4), dpi=100)
+        self.suba = self.fig.add_subplot(111)
 
-        toolbar = NavigationToolbar2Tk(canvas, self.frame6)
-        toolbar.update()
-        canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
+        self.canvas = FigureCanvasTkAgg(self.fig, master=self.frame8)
+        self.canvas.draw()
+        self.canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
 
     def sleep(self, x):
 
