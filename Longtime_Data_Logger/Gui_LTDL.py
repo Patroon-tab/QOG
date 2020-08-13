@@ -15,6 +15,7 @@ from tkinter import filedialog
 from tkinter import messagebox
 import serial.tools.list_ports
 from matplotlib import style
+
 style.use('ggplot')
 from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg, NavigationToolbar2Tk)
@@ -118,7 +119,6 @@ class MyGui:
         self.canvas = FigureCanvasTkAgg(self.fig, master=self.frame8)
         self.canvas.draw()
         self.canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=1)
-
 
         # Frame Graph End
 
@@ -239,7 +239,6 @@ class MyGui:
         self.xvals = []
         self.yvals = []
 
-
         for x in range(numberofmeas):
             self.dmm.initialize(com)
             value = self.dmm.getValue()
@@ -252,14 +251,18 @@ class MyGui:
             print(linewr)
             file.write(linewr)
             file.close()
-            self.suba.plot(self.xvals, self.yvals, color="blue")
+            self.fig.delaxes(self.suba)
+            self.suba = self.fig.add_subplot(111)
+            #xvals = self.xvals[-20:]
+            #yvals = self.yvals[-20:]
+            xvals = self.xvals
+            yvals = self.yvals
+            self.suba.plot(xvals, yvals, color="blue")
             self.canvas.draw()
             percent = (x / numberofmeas) * 100
             self.percentlab["text"] = ("Progress: %.2f" % percent)  # Showing percentage in Gui
             self.sleep(self.timebet)
             time = time + self.timebet
-
-
 
         file.close()
 
